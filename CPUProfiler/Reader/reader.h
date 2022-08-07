@@ -6,20 +6,20 @@
 
 
 void readStatCPU(void);
-void* readerService(void* arg);
+void* readerService(void* ptr __attribute__((unused)));
 
 typedef struct 
 {
-    unsigned long user_procs;
-    unsigned long nice_procs;
-    unsigned long system_procs;
-    unsigned long idle_procs;
-    unsigned long iowait_procs;
-    unsigned long irq_procs;
-    unsigned long softirq_procs;
-    unsigned long steal_procs;
-    unsigned long guest_procs;
-    unsigned long guest_nice_procs;
+    double user_procs;
+    double nice_procs;
+    double system_procs;
+    double idle_procs;
+    double iowait_procs;
+    double irq_procs;
+    double softirq_procs;
+    double steal_procs;
+    double guest_procs;
+    double guest_nice_procs;
     char core_name[5];
 }SCoreProc;
 

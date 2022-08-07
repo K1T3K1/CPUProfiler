@@ -1,8 +1,8 @@
 #include <stdio.h>
 #include "reader.h"
 
-SCoreProc CoreData[CORE_NUMBER+1];
-SCoreProc FIFOBuffer[(CORE_NUMBER+1)*8];
+static SCoreProc CoreData[CORE_NUMBER + 1];
+SCoreProc FIFOBuffer[(CORE_NUMBER + 1) * 8];
 uint8_t FIFOCounter = 0;
 
 /**
@@ -15,25 +15,25 @@ uint8_t FIFOCounter = 0;
 void readStatCPU(void)
 {
     FILE *fp = fopen("/proc/stat", "rb");
-    if(fp!=NULL)
+    if (fp != NULL)
     {
         for (int i = 0; i <= CORE_NUMBER; i++)
         {
-            fscanf(fp,"%s %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu\n",
-            CoreData[i].core_name,
-            &CoreData[i].user_procs,
-            &CoreData[i].nice_procs,
-            &CoreData[i].system_procs,
-            &CoreData[i].idle_procs,
-            &CoreData[i].iowait_procs,
-            &CoreData[i].irq_procs,
-            &CoreData[i].softirq_procs,
-            &CoreData[i].steal_procs,
-            &CoreData[i].guest_procs,
-            &CoreData[i].guest_nice_procs);
+            fscanf(fp, "%s %lf %lf %lf %lf %lf %lf %lf %lf %lf %lf\n",
+                   CoreData[i].core_name,
+                   &CoreData[i].user_procs,
+                   &CoreData[i].nice_procs,
+                   &CoreData[i].system_procs,
+                   &CoreData[i].idle_procs,
+                   &CoreData[i].iowait_procs,
+                   &CoreData[i].irq_procs,
+                   &CoreData[i].softirq_procs,
+                   &CoreData[i].steal_procs,
+                   &CoreData[i].guest_procs,
+                   &CoreData[i].guest_nice_procs);
         }
         fclose(fp);
-        //printf("%lu\n", CoreData[0].user_procs);
+        // printf("%lu\n", CoreData[0].user_procs);
     }
 }
 
@@ -42,12 +42,13 @@ void readStatCPU(void)
  *        into a Queue which serves as a
  *        data source for Analyzer module
  */
-void* readerService(void* arg)
+void *readerService(void *ptr __attribute__((unused)))
 {
+
     readStatCPU();
-    for(int i = 0; i < CORE_NUMBER+1; i++)
+    for (int i = 0; i < CORE_NUMBER + 1; i++)
     {
-        if (FIFOCounter < (CORE_NUMBER+1)*8)
+        if (FIFOCounter < (CORE_NUMBER + 1) * 8)
         {
             FIFOBuffer[FIFOCounter] = CoreData[i];
             FIFOCounter++;

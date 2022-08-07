@@ -4,7 +4,7 @@
 #include "analyzer.h"
 #include "reader.h"
 
-void* printUsage(void* arg);
+void* printUsage(void* ptr __attribute__((unused)));
 
 
 #endif //PRINTER_H_

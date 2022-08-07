@@ -4,10 +4,11 @@
 #include "unistd.h"
 #include "pthread.h"
 #include <stdlib.h>
+#include "analyzerTests.h"
 
 int main()
 {
-    pthread_t TReader, TAnalyzer, TPrinter;
+    pthread_t TReader, TAnalyzer, TPrinter, TAnalyzerTest, TMoveFIFO;
     while (1)
     {
         pthread_create(&TReader, NULL, readerService, NULL);

@@ -5,9 +5,9 @@
 #include "reader.h"
 
 void getAwaitingData(void);
-void* analyzeData(void* arg);
-void calculateCoreUsage(uint8_t core);
+void* analyzeData(void* ptr __attribute__((unused)));
+void calculateCoreUsage(int core);
 
-extern float usageToPrinterBuffer[(CORE_NUMBER+1)*8];
+extern double usageToPrinterBuffer[(CORE_NUMBER+1)*8];
 extern uint8_t pBufferCounter;
 #endif //ANALYZER_H_

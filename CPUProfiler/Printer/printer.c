@@ -1,7 +1,7 @@
 #include "printer.h"
 #include "stdio.h"
 
-void *printUsage(void *arg)
+void *printUsage(void* ptr __attribute__((unused)))
 {
     for (int i = 0; i < CORE_NUMBER + 1; i++)
     {
