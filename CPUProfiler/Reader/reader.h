@@ -6,7 +6,7 @@
 
 
 void readStatCPU(void);
-void readerService(void);
+void* readerService(void* arg);
 
 typedef struct 
 {

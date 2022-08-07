@@ -1,5 +1,5 @@
 #include "analyzer.h"
-
+#include <stdio.h>
 SCoreProc localCoreData[(CORE_NUMBER+1)*2];
 float calculatedUsage[(CORE_NUMBER+1)];
 float usageToPrinterBuffer[(CORE_NUMBER+1)*8];
@@ -11,14 +11,14 @@ void getAwaitingData(void)
         {
             localCoreData[i] = FIFOBuffer[i];
         }
-        for(int i = 0; i < (CORE_NUMBER+1)*7;i++)
+        for(int i = 0; i < (CORE_NUMBER+1)*8;i++)
         {
             FIFOBuffer[i] = FIFOBuffer[i+CORE_NUMBER];
         }
         FIFOCounter -= (CORE_NUMBER+1)*2;
 }
 
-void analyzeData(void)
+void* analyzeData(void* arg)
 {
     if (FIFOCounter >= (CORE_NUMBER+1)*2)
     {
@@ -36,14 +36,15 @@ void analyzeData(void)
             }
         }
     }
+    return NULL;
 }
 
 void calculateCoreUsage(uint8_t core)
 {
     float prevIdle, Idle, prevActive, Active, prevTotal, Total, totald, idled;
-
     prevIdle = localCoreData[core].idle_procs + 
                localCoreData[core].iowait_procs;
+
     Idle = localCoreData[core+CORE_NUMBER+1].idle_procs + 
            localCoreData[core+CORE_NUMBER+1].iowait_procs;
 
@@ -66,6 +67,5 @@ void calculateCoreUsage(uint8_t core)
 
     totald = Total - prevTotal;
     idled = Idle - prevIdle;
-
-    calculatedUsage[core] = (totald - idled)/totald;
+    calculatedUsage[core] = ((totald - idled)/totald)*100;
 }

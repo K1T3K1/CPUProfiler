@@ -33,7 +33,7 @@ void readStatCPU(void)
             &CoreData[i].guest_nice_procs);
         }
         fclose(fp);
-        printf("%lu\n", CoreData[0].user_procs);
+        //printf("%lu\n", CoreData[0].user_procs);
     }
 }
 
@@ -42,10 +42,10 @@ void readStatCPU(void)
  *        into a Queue which serves as a
  *        data source for Analyzer module
  */
-void readerService(void)
+void* readerService(void* arg)
 {
     readStatCPU();
-    for(int i = 0; i <= CORE_NUMBER+1; i++)
+    for(int i = 0; i < CORE_NUMBER+1; i++)
     {
         if (FIFOCounter < (CORE_NUMBER+1)*8)
         {
@@ -53,4 +53,5 @@ void readerService(void)
             FIFOCounter++;
         }
     }
+    return NULL;
 }
