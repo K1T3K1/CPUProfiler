@@ -19,5 +19,11 @@ target_include_directories(cpuprofiler
                            ${CMAKE_SOURCE_DIR}/CPUProfiler/Watchdog
                            ${CMAKE_SOURCE_DIR}/CPUProfiler/Logger)
 
+include_directories( ${CMAKE_SOURCE_DIR}/CPUProfiler/Reader
+                     ${CMAKE_SOURCE_DIR}/CPUProfiler/Analyzer
+                     ${CMAKE_SOURCE_DIR}/CPUProfiler/Printer
+                     ${CMAKE_SOURCE_DIR}/CPUProfiler/Watchdog
+                     ${CMAKE_SOURCE_DIR}/CPUProfiler/Logger)
+
         
 target_link_libraries(cpuprofiler default-lib)

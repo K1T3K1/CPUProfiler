@@ -2,8 +2,11 @@
 #define READER_H_
 #define CORE_NUMBER 4
 
+#include "analyzer.h"
+
 
 void readStatCPU(void);
+void readerService(void);
 
 typedef struct 
 {
@@ -18,8 +21,8 @@ typedef struct
     unsigned long guest_procs;
     unsigned long guest_nice_procs;
     char core_name[5];
-}SCoreProcs;
+}SCoreProc;
 
-extern SCoreProcs CoreData[CORE_NUMBER+1];
-
+extern SCoreProc FIFOBuffer[(CORE_NUMBER+1)*8];
+extern uint8_t FIFOCounter;
 #endif //READER_H_

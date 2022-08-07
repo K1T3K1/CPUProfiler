@@ -1,12 +1,17 @@
 #include <stdio.h>
 #include "reader.h"
 
-#define BUFFERLEN CORE_NUMBER*120
+SCoreProc CoreData[CORE_NUMBER+1];
+SCoreProc FIFOBuffer[(CORE_NUMBER+1)*8];
+uint8_t FIFOCounter = 0;
 
-unsigned char cpuDataBuffer[BUFFERLEN];
-int bufflen = 0;
-SCoreProcs CoreData[CORE_NUMBER+1];
-
+/**
+ * @brief reads data from /proc/stat system file
+ *        and places it in a SCoreProc CoreData
+ *        where each array element equals
+ *        one CPU Core and the first element is
+ *        all Cores summarized
+ */
 void readStatCPU(void)
 {
     FILE *fp = fopen("/proc/stat", "rb");
@@ -14,7 +19,7 @@ void readStatCPU(void)
     {
         for (int i = 0; i <= CORE_NUMBER; i++)
         {
-            fscanf(fp,"%s%lu %lu %lu %lu %lu %lu %lu %lu %lu %lu\n",
+            fscanf(fp,"%s %lu %lu %lu %lu %lu %lu %lu %lu %lu %lu\n",
             CoreData[i].core_name,
             &CoreData[i].user_procs,
             &CoreData[i].nice_procs,
@@ -28,6 +33,24 @@ void readStatCPU(void)
             &CoreData[i].guest_nice_procs);
         }
         fclose(fp);
+        printf("%lu\n", CoreData[0].user_procs);
     }
-    printf("\n%lu\n", CoreData[4].user_procs);
+}
+
+/**
+ * @brief transfers data from CoreData array
+ *        into a Queue which serves as a
+ *        data source for Analyzer module
+ */
+void readerService(void)
+{
+    readStatCPU();
+    for(int i = 0; i <= CORE_NUMBER+1; i++)
+    {
+        if (FIFOCounter < (CORE_NUMBER+1)*8)
+        {
+            FIFOBuffer[FIFOCounter] = CoreData[i];
+            FIFOCounter++;
+        }
+    }
 }
