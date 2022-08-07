@@ -5,6 +5,11 @@ static double calculatedUsage[(CORE_NUMBER + 1)];
 double usageToPrinterBuffer[(CORE_NUMBER + 1) * 8];
 uint8_t pBufferCounter = 0;
 
+/**
+ * @brief reads data from queue buffer
+ *        and moves data in queue
+ * 
+ */
 void getAwaitingData(void)
 {
     for (int i = 0; i < (CORE_NUMBER + 1) * 2; i++)
@@ -18,6 +23,11 @@ void getAwaitingData(void)
     FIFOCounter -= (CORE_NUMBER + 1) * 2;
 }
 
+/**
+ * @brief forces data reading from buffer 
+ *        and iterates through each read core
+ *        activating analyzer module for each individual core
+ */
 void *analyzeData(void *ptr __attribute__((unused)))
 {
 
@@ -40,6 +50,15 @@ void *analyzeData(void *ptr __attribute__((unused)))
     return NULL;
 }
 
+/**
+ * @brief calculates cpu usage using data read from SCoreProc struct
+ * 
+ * @param core which core we are calculating data for
+ *             0 - cpu (summary)
+ *             1 - cpu0 (1st core)
+ *             2 - cpu1 (2nd core)
+ *             etc
+ */
 void calculateCoreUsage(int core)
 {
     double prevIdle, Idle, prevActive, Active, prevTotal, Total, totald, idled;
