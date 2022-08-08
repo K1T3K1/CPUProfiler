@@ -18,9 +18,9 @@ void getAwaitingData(void)
     }
     for (int i = 0; i < (CORE_NUMBER + 1) * 8; i++)
     {
-        FIFOBuffer[i] = FIFOBuffer[i + CORE_NUMBER];
+        FIFOBuffer[i] = FIFOBuffer[i + CORE_NUMBER + 1];
     }
-    FIFOCounter -= (CORE_NUMBER + 1) * 2;
+    FIFOCounter -= (CORE_NUMBER + 1);
 }
 
 /**
